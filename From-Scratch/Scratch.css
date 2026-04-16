@@ -1,0 +1,116 @@
+/* Scratch.css */
+
+#nav-banner {
+    background-color: #2a5cb8;
+    padding: 12px 0;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    border-bottom: 2px solid white;
+}
+
+#nav-banner a {
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 20px;
+    padding: 7px 22px;
+    border: 2px solid white;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+#nav-banner a:hover {
+    background-color: white;
+    color: #2a5cb8;
+}
+
+
+a {
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+img {
+    width: 50%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.video-wrapper {
+    text-align: center;
+    margin: 20px auto;
+}
+
+.tableau-wrapper {
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+body {
+    background-color: #5b98ed;
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 30px;
+}
+
+ol,
+ul {
+    text-align: center;
+    font-size: 20px;
+    list-style-position: inside;
+}
+
+nav {
+    text-align: center;
+}
+
+main {
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+}
+
+li {
+    text-align: center;
+}
+
+.champions-section {
+    background-color: #1e4a9e;
+    border-radius: 12px;
+    padding: 20px 40px;
+    margin: 20px auto;
+    max-width: 700px;
+}
+
+.mvp-section {
+    background-color: #163a7a;
+    border-radius: 12px;
+    padding: 20px 40px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.intro-section {
+    background-color: #0f2a57;
+    border-radius: 12px;
+    padding: 16px 40px;
+    margin: 20px auto;
+    max-width: 700px;
+    font-style: italic;
+}

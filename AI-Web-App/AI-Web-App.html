@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Finals Trivia | Test Your Knowledge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+
+        .top-nav {
+            width: 100%;
+            max-width: 750px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+        .top-nav a {
+            color: #c8a84b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .top-nav a:hover { opacity: 1; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header .trophy { font-size: 48px; margin-bottom: 8px; }
+        .header h1 {
+            font-size: clamp(26px, 5vw, 42px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #f5d060, #c8842a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            color: #888;
+            font-size: 15px;
+            margin-top: 6px;
+        }
+
+        .card {
+            background: #13131e;
+            border: 1px solid #2a2a3a;
+            border-radius: 20px;
+            padding: 36px;
+            width: 100%;
+            max-width: 750px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        #start-screen { text-align: center; }
+        #start-screen h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #f5d060;
+        }
+        #start-screen p {
+            color: #aaa;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .rules {
+            background: #1a1a28;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0 28px;
+            text-align: left;
+        }
+        .rules li {
+            color: #bbb;
+            font-size: 15px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+            list-style: none;
+        }
+        .rules li::before { content: "\2192  "; color: #c8a84b; font-weight: 700; }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #f5d060, #c8842a);
+            color: #0a0a0f;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,132,42,0.4); }
+        .btn-gold:active { transform: translateY(0); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #c8a84b;
+            color: #c8a84b;
+            padding: 10px 28px;
+            font-size: 15px;
+        }
+        .btn-outline:hover { background: #c8a84b22; }
+
+        #quiz-screen { display: none; }
+
+        .quiz-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .question-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .score-display {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c8a84b;
+        }
+
+        .timer-wrap { margin-bottom: 22px; }
+        .timer-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        #timer-count { font-weight: 700; color: #f5d060; }
+        .timer-bar-bg {
+            background: #1e1e2e;
+            border-radius: 100px;
+            height: 8px;
+            overflow: hidden;
+        }
+        #timer-bar {
+            height: 100%;
+            border-radius: 100px;
+            background: linear-gradient(90deg, #f5d060, #c8842a);
+            transition: width 1s linear, background 0.5s;
+            width: 100%;
+        }
+        #timer-bar.urgent { background: linear-gradient(90deg, #ff4444, #cc0000); }
+
+        .category-tag {
+            display: inline-block;
+            background: #1e1e2e;
+            border: 1px solid #3a3a4a;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        #question-text {
+            font-size: clamp(17px, 2.5vw, 22px);
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 28px;
+            color: #f0f0f0;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 520px) { .options-grid { grid-template-columns: 1fr; } }
+
+        .option {
+            background: #1a1a28;
+            border: 2px solid #2a2a3a;
+            border-radius: 14px;
+            padding: 16px 18px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: #ccc;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option:hover:not(:disabled) {
+            border-color: #c8a84b;
+            background: #1e1e30;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .option .opt-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #252535;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: #888;
+            flex-shrink: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .option.correct {
+            border-color: #22c55e;
+            background: #052e16;
+            color: #4ade80;
+        }
+        .option.correct .opt-letter { background: #22c55e; color: #fff; }
+        .option.wrong {
+            border-color: #ef4444;
+            background: #2d0a0a;
+            color: #f87171;
+        }
+        .option.wrong .opt-letter { background: #ef4444; color: #fff; }
+        .option:disabled { cursor: default; transform: none; }
+
+        #feedback {
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            min-height: 22px;
+            margin-bottom: 16px;
+            transition: opacity 0.2s;
+        }
+        #feedback.correct-msg { color: #4ade80; }
+        #feedback.wrong-msg { color: #f87171; }
+
+        #next-btn { display: none; width: 100%; }
+
+        .progress-dots {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2a2a3a;
+            transition: background 0.3s;
+        }
+        .dot.answered-correct { background: #22c55e; }
+        .dot.answered-wrong { background: #ef4444; }
+        .dot.current { background: #c8a84b; box-shadow: 0 0 8px #c8a84b66; }
+
+        #results-screen { display: none; text-align: center; }
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(#f5d060 0%, transparent 0%);
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            background: #13131e;
+        }
+        .score-inner {
+            position: relative;
+            z-index: 1;
+        }
+        .score-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: #f5d060;
+            display: block;
+            line-height: 1;
+        }
+        .score-label { font-size: 12px; color: #666; margin-top: 2px; }
+        #results-screen h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        #result-subtitle { color: #888; font-size: 15px; margin-bottom: 28px; }
+
+        .breakdown {
+            text-align: left;
+            margin-bottom: 28px;
+        }
+        .breakdown h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .breakdown-item {
+            background: #1a1a28;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .breakdown-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .breakdown-q { color: #ccc; line-height: 1.4; }
+        .breakdown-a { font-weight: 600; margin-top: 3px; }
+        .breakdown-a.correct-a { color: #4ade80; }
+        .breakdown-a.wrong-a { color: #f87171; }
+
+        .results-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeSlideIn 0.35s ease forwards; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%       { transform: translateX(-8px); }
+            40%       { transform: translateX(8px); }
+            60%       { transform: translateX(-5px); }
+            80%       { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.4s ease; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="../From-Scratch/From-Scratch.html">← Back to NBA Finals</a>
+    </div>
+
+    <div class="header">
+        <div class="trophy">🏆</div>
+        <h1>NBA Finals Trivia</h1>
+        <p>How well do you know basketball's greatest stage?</p>
+    </div>
+
+    <div class="card" id="start-screen">
+        <h2>Ready to Play?</h2>
+        <p>10 questions covering NBA Finals history — from the Celtics dynasty to modern-day legends.</p>
+        <ul class="rules">
+            <li>20 seconds per question — don't run out the clock</li>
+            <li>Pick the best answer from four choices</li>
+            <li>Your score is tallied at the end with a full breakdown</li>
+            <li>No retries — commit to your answer</li>
+        </ul>
+        <button class="btn btn-gold" onclick="startGame()">Start Trivia</button>
+    </div>
+
+    <div class="card" id="quiz-screen">
+        <div class="quiz-top">
+            <span class="question-counter" id="q-counter">Question 1 of 10</span>
+            <span class="score-display" id="score-display">Score: 0</span>
+        </div>
+
+        <div class="timer-wrap">
+            <div class="timer-label">
+                <span>Time Remaining</span>
+                <span id="timer-count">20s</span>
+            </div>
+            <div class="timer-bar-bg">
+                <div id="timer-bar"></div>
+            </div>
+        </div>
+
+        <div class="category-tag" id="category-tag">General</div>
+        <div id="question-text"></div>
+
+        <div class="options-grid" id="options-grid"></div>
+
+        <div id="feedback"></div>
+        <button class="btn btn-gold" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+
+        <div class="progress-dots" id="progress-dots"></div>
+    </div>
+
+    <div class="card" id="results-screen">
+        <div class="score-circle" id="score-circle">
+            <div class="score-inner">
+                <span class="score-number" id="final-score-num">0/10</span>
+                <div class="score-label">CORRECT</div>
+            </div>
+        </div>
+        <h2 id="result-title">Nice Work!</h2>
+        <p id="result-subtitle"></p>
+
+        <div class="breakdown">
+            <h3>Question Breakdown</h3>
+            <div id="breakdown-list"></div>
+        </div>
+
+        <div class="results-btns">
+            <button class="btn btn-gold" onclick="restartGame()">Play Again</button>
+            <a href="../From-Scratch/From-Scratch.html" class="btn btn-outline">Back to Site</a>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Dynasty Era",
+                question: "How many consecutive NBA Championships did the Boston Celtics win from 1959 to 1966?",
+                options: ["6", "7", "8", "9"],
+                answer: 2
+            },
+            {
+                category: "The GOAT Debate",
+                question: "Michael Jordan went undefeated in the NBA Finals. How many championships did he win?",
+                options: ["4", "5", "6", "7"],
+                answer: 2
+            },
+            {
+                category: "Coaching Legends",
+                question: "Phil Jackson holds the record for most NBA championships won as a head coach. How many rings did he win?",
+                options: ["9", "10", "11", "12"],
+                answer: 2
+            },
+            {
+                category: "Strange But True",
+                question: "Jerry West won the first-ever Finals MVP award in 1969 — despite being on the losing team. Which team did he play for?",
+                options: ["Boston Celtics", "New York Knicks", "Los Angeles Lakers", "Philadelphia 76ers"],
+                answer: 2
+            },
+            {
+                category: "The Upset",
+                question: "The 2004 NBA Finals was one of the biggest upsets in history. Which underdog team defeated the star-studded LA Lakers?",
+                options: ["Indiana Pacers", "Detroit Pistons", "San Antonio Spurs", "New Jersey Nets"],
+                answer: 1
+            },
+            {
+                category: "Golden State Era",
+                question: "Andre Iguodala was a surprise pick for Finals MVP in 2015. Who did he outperform for that honor?",
+                options: ["Klay Thompson", "Draymond Green", "Stephen Curry", "LeBron James"],
+                answer: 2
+            },
+            {
+                category: "LeBron's Legacy",
+                question: "LeBron James led the 2016 Cavaliers back from a 3-1 deficit to win the title. What was his block in Game 7 called?",
+                options: ["The Stop", "The Block", "The Chase Down", "The Rejection"],
+                answer: 2
+            },
+            {
+                category: "The Last Dance",
+                question: "In the famous Game 6 of the 1998 Finals, Michael Jordan hit the title-winning shot over which Jazz defender?",
+                options: ["John Stockton", "Karl Malone", "Bryon Russell", "Greg Ostertag"],
+                answer: 2
+            },
+            {
+                category: "Modern Era",
+                question: "Nikola Jokic won the 2023 Finals MVP with the Denver Nuggets. Which team did Denver defeat in the Finals?",
+                options: ["Boston Celtics", "Miami Heat", "Los Angeles Lakers", "Phoenix Suns"],
+                answer: 1
+            },
+            {
+                category: "Finals History",
+                question: "Which franchise has won the most NBA Championships in league history?",
+                options: ["Los Angeles Lakers", "Chicago Bulls", "Boston Celtics", "Golden State Warriors"],
+                answer: 2
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let userAnswers = [];
+        let timerInterval = null;
+        let timeLeft = 20;
+        let answered = false;
+
+        function startGame() {
+            currentQ = 0;
+            score = 0;
+            userAnswers = [];
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            buildDots();
+            loadQuestion();
+        }
+
+        function buildDots() {
+            const wrap = document.getElementById('progress-dots');
+            wrap.innerHTML = '';
+            questions.forEach((_, i) => {
+                const d = document.createElement('div');
+                d.className = 'dot' + (i === 0 ? ' current' : '');
+                d.id = 'dot-' + i;
+                wrap.appendChild(d);
+            });
+        }
+
+        function loadQuestion() {
+            answered = false;
+            timeLeft = 20;
+            const q = questions[currentQ];
+
+            document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+            document.getElementById('score-display').textContent = `Score: ${score}`;
+            document.getElementById('category-tag').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = '';
+            document.getElementById('next-btn').style.display = 'none';
+
+            const letters = ['A', 'B', 'C', 'D'];
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+                btn.onclick = () => selectAnswer(i);
+                grid.appendChild(btn);
+            });
+
+            // Reset timer bar
+            const bar = document.getElementById('timer-bar');
+            bar.style.transition = 'none';
+            bar.style.width = '100%';
+            bar.classList.remove('urgent');
+            document.getElementById('timer-count').textContent = '20s';
+
+            // Animate card in
+            document.getElementById('quiz-screen').classList.remove('fade-in');
+            void document.getElementById('quiz-screen').offsetWidth;
+            document.getElementById('quiz-screen').classList.add('fade-in');
+
+            // Start timer
+            clearInterval(timerInterval);
+            setTimeout(() => {
+                bar.style.transition = 'width 1s linear';
+                startTimer();
+            }, 50);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const bar = document.getElementById('timer-bar');
+                const pct = (timeLeft / 20) * 100;
+                bar.style.width = pct + '%';
+                document.getElementById('timer-count').textContent = timeLeft + 's';
+
+                if (timeLeft <= 7) bar.classList.add('urgent');
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if (!answered) timeOut();
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+
+            const q = questions[currentQ];
+            const options = document.querySelectorAll('.option');
+            const isCorrect = index === q.answer;
+
+            options.forEach(o => o.disabled = true);
+            options[q.answer].classList.add('correct');
+
+            const feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                score++;
+                options[index].classList.add('correct');
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'correct-msg';
+                userAnswers.push({ correct: true, chosen: index });
+                updateDot(currentQ, 'answered-correct');
+            } else {
+                options[index].classList.add('wrong');
+                options[index].classList.add('shake');
+                feedback.textContent = `✗ The answer was: ${q.options[q.answer]}`;
+                feedback.className = 'wrong-msg';
+                userAnswers.push({ correct: false, chosen: index });
+                updateDot(currentQ, 'answered-wrong');
+            }
+
+            document.getElementById('score-display').textContent = `Score: ${score}`;
+            showNextBtn();
+        }
+
+        function timeOut() {
+            answered = true;
+            const q = questions[currentQ];
+            const options = document.querySelectorAll('.option');
+            options.forEach(o => o.disabled = true);
+            options[q.answer].classList.add('correct');
+
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = `⏰ Time's up! Answer: ${q.options[q.answer]}`;
+            feedback.className = 'wrong-msg';
+            userAnswers.push({ correct: false, chosen: -1 });
+            updateDot(currentQ, 'answered-wrong');
+            showNextBtn();
+        }
+
+        function updateDot(index, cls) {
+            const dot = document.getElementById('dot-' + index);
+            dot.classList.remove('current');
+            dot.classList.add(cls);
+            if (index + 1 < questions.length) {
+                document.getElementById('dot-' + (index + 1)).classList.add('current');
+            }
+        }
+
+        function showNextBtn() {
+            const btn = document.getElementById('next-btn');
+            btn.style.display = 'block';
+            btn.textContent = currentQ === questions.length - 1 ? 'See Results 🏆' : 'Next Question →';
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ >= questions.length) {
+                showResults();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            document.getElementById('quiz-screen').style.display = 'none';
+            const resultsScreen = document.getElementById('results-screen');
+            resultsScreen.style.display = 'block';
+            resultsScreen.classList.remove('fade-in');
+            void resultsScreen.offsetWidth;
+            resultsScreen.classList.add('fade-in');
+
+            const pct = Math.round((score / questions.length) * 100);
+
+            document.getElementById('final-score-num').textContent = `${score}/10`;
+
+            // Conic gradient ring
+            const circle = document.getElementById('score-circle');
+            circle.style.background = `conic-gradient(#f5d060 ${pct * 3.6}deg, #1e1e2e ${pct * 3.6}deg)`;
+
+            let title, subtitle;
+            if (score === 10) {
+                title = "Perfect Score! 🏆";
+                subtitle = "You're an NBA Finals legend. Nothing gets past you.";
+            } else if (score >= 8) {
+                title = "Elite Knowledge! 🔥";
+                subtitle = "You clearly know your Finals history. Impressive.";
+            } else if (score >= 6) {
+                title = "Solid Showing 👍";
+                subtitle = "You've got a good handle on the Finals. A few blind spots, but not bad.";
+            } else if (score >= 4) {
+                title = "Decent Effort 💪";
+                subtitle = "You know the big moments, but the details tripped you up.";
+            } else {
+                title = "Back to the Tape 📺";
+                subtitle = "Time to re-watch some Finals games. You'll get there.";
+            }
+
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-subtitle').textContent = subtitle;
+
+            // Breakdown
+            const breakdown = document.getElementById('breakdown-list');
+            breakdown.innerHTML = '';
+            questions.forEach((q, i) => {
+                const ua = userAnswers[i];
+                const item = document.createElement('div');
+                item.className = 'breakdown-item';
+                const icon = ua.correct ? '✅' : '❌';
+                const answerText = ua.correct
+                    ? `Your answer: ${q.options[ua.chosen]}`
+                    : ua.chosen === -1
+                        ? `Timed out — Answer: ${q.options[q.answer]}`
+                        : `You said: ${q.options[ua.chosen]} — Correct: ${q.options[q.answer]}`;
+                item.innerHTML = `
+                    <span class="breakdown-icon">${icon}</span>
+                    <div>
+                        <div class="breakdown-q">${q.question}</div>
+                        <div class="breakdown-a ${ua.correct ? 'correct-a' : 'wrong-a'}">${answerText}</div>
+                    </div>`;
+                breakdown.appendChild(item);
+            });
+        }
+
+        function restartGame() {
+            document.getElementById('results-screen').style.display = 'none';
+            startGame();
+        }
+    </script>
+</body>
+</html>
